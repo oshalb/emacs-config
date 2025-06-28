@@ -6,6 +6,8 @@
 (global-display-line-numbers-mode 1) ; display line numbers
 (setq ring-bell-function 'ignore) ; Removes the annoying alert sound
 (custom-set-variables '(default-frame-alist '((fullscreen . maximized)))) ; Sets the buffer to use fullscreen
+;(set-frame-parameter nil 'alpha 60)
+;(add-to-list 'default-frame-alist '(alpha . 60))
 
 ;; Bootstrap script for Straight.el
 (defvar bootstrap-version)
@@ -35,10 +37,15 @@
   :straight t)
 (use-package auctex
   :straight t)
+(use-package sr-speedbar
+  :straight t)
+(use-package magit
+  :straight t)
+(use-package vterm
+  :straight t)
 
 (add-to-list 'default-frame-alist
 	     '(font . "Source Code Pro-18")) ; Set the font to Source Code Pro with size 18 after loading packages
-
 
 ;; Meow Keybindings
 
@@ -49,9 +56,6 @@
    '("k" . meow-prev)
    '("<escape>" . ignore))
   (meow-leader-define-key
-   ;; SPC j/k will run the original command in MOTION state.
-   '("j" . "H-j")
-   '("k" . "H-k")
    ;; Use SPC (0-9) for digit arguments.
    '("1" . meow-digit-argument)
    '("2" . meow-digit-argument)
@@ -64,7 +68,11 @@
    '("9" . meow-digit-argument)
    '("0" . meow-digit-argument)
    '("/" . meow-keypad-describe-key)
-   '("?" . meow-cheatsheet))
+   '("?" . meow-cheatsheet)
+   '("f" . find-file)
+   '("s" . save-buffer)
+   '("SPC" . (lambda () (interactive) (call-interactively 'execute-extended-command)))
+   '("b" . switch-to-buffer))
   (meow-normal-define-key
    '("0" . meow-expand-0)
    '("9" . meow-expand-9)
@@ -108,7 +116,6 @@
    '("n" . meow-search)
    '("o" . meow-block)
    '("O" . meow-to-block)
-   '("p" . meow-yank)
    '("q" . meow-quit)
    '("Q" . meow-goto-line)
    '("r" . meow-replace)
@@ -126,4 +133,14 @@
    '("Y" . meow-sync-grab)
    '("z" . meow-pop-selection)
    '("'" . repeat)
-   '("<escape>" . ignore)))
+   '("<escape>" . ignore))
+  (meow-define-keys 'insert
+   '("C-[" . meow-insert-exit)))
+
+(meow-setup)
+(meow-global-mode 1)
+
+
+;; Speedbar settings
+(setq speedbar-show-unknown-files t)
+(setq speedbar-directory-unshown-regexp "^$")
