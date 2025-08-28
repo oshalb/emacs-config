@@ -1,15 +1,20 @@
-;;; Emacs Init file for Oshal Borkar
+;;; Init file for Oshal Borkar
 
-;; Basic Startup changes
+;; ------------------------
+;; Basic visual / frame defaults
+;; ------------------------
+;; Disable UI clutter
 (tool-bar-mode -1) ; Hides the tool bar
 (scroll-bar-mode -1) ; Hides scroll bar
 (global-display-line-numbers-mode 1) ; display line numbers
 (setq ring-bell-function 'ignore) ; Removes the annoying alert sound
 (custom-set-variables '(default-frame-alist '((fullscreen . maximized)))) ; Sets the buffer to use fullscreen
-;(set-frame-parameter nil 'alpha 60)
+  ;(set-frame-parameter nil 'alpha 60)
 ;(add-to-list 'default-frame-alist '(alpha . 60))
 
-;; Bootstrap script for Straight.el
+;; ------------------------
+;; Bootstrap straight.el (canonical version)
+;; ------------------------
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name
@@ -29,12 +34,11 @@
 
 ;; List of packages installed via Straight.el
 (straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
 
 ;; Use-Package via Straight.el
-(use-package el-patch
-  :straight t)
-(use-package meow
-  :straight t)
+(use-package el-patch)
+(use-package meow)
 (use-package auctex
   :straight t)
 (use-package sr-speedbar
@@ -43,6 +47,7 @@
   :straight t)
 (use-package vterm
   :straight t)
+(use-package markdown-mode)
 
 (add-to-list 'default-frame-alist
 	     '(font . "Source Code Pro-18")) ; Set the font to Source Code Pro with size 18 after loading packages
@@ -71,8 +76,12 @@
    '("?" . meow-cheatsheet)
    '("f" . find-file)
    '("s" . save-buffer)
+   '("qq" . kill-emacs)
    '("SPC" . (lambda () (interactive) (call-interactively 'execute-extended-command)))
-   '("b" . switch-to-buffer))
+   '("bs" . switch-to-buffer)
+   '("bk" . kill-buffer)
+   '("qf" . delete-frame)
+   '("g" . magit-status))
   (meow-normal-define-key
    '("0" . meow-expand-0)
    '("9" . meow-expand-9)
@@ -144,3 +153,25 @@
 ;; Speedbar settings
 (setq speedbar-show-unknown-files t)
 (setq speedbar-directory-unshown-regexp "^$")
+
+;; ===== Centralize Backups and Auto-Saves =====
+
+;; Backup files (~)
+(setq backup-directory-alist `(("." . "~/.cache/emacs/backups")))
+(setq version-control t      ;; Use version numbers for backups
+      kept-new-versions 10
+      kept-old-versions 2
+      delete-old-versions t
+      backup-by-copying t)   ;; Don’t clobber symlinks
+
+;; Auto-save files (#...#)
+(setq auto-save-file-name-transforms
+      `((".*" "~/.cache/emacs/auto-saves/" t)))
+(setq auto-save-default t
+      auto-save-timeout 5   ;; seconds idle before auto-save
+      auto-save-interval 20 ;; keystrokes before auto-save
+)
+
+;; Create the directories if they don't exist
+(make-directory "~/.cache/emacs/backups/" t)
+(make-directory "~/.cache/emacs/auto-saves/" t)
