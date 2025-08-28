@@ -156,22 +156,26 @@
 
 ;; ===== Centralize Backups and Auto-Saves =====
 
-;; Backup files (~)
-(setq backup-directory-alist `(("." . "~/.cache/emacs/backups")))
-(setq version-control t      ;; Use version numbers for backups
+;; Base cache dir
+(defconst emacs-cache-dir "/Users/oshalb/.cache/emacs")
+(defconst emacs-auto-save-dir (concat emacs-cache-dir "/auto-saves/"))
+(defconst emacs-backup-dir (concat emacs-cache-dir "/backups/"))
+
+;; Ensure dirs exist
+(make-directory emacs-auto-save-dir t)
+(make-directory emacs-backup-dir t)
+
+;; --- Auto-saves (#...#) ---
+(setq auto-save-default t
+      auto-save-timeout 10
+      auto-save-interval 10
+      auto-save-file-name-transforms
+      `((".*" ,(concat emacs-auto-save-dir "\\1") t)))
+
+;; --- Backups (~) ---
+(setq backup-directory-alist `(("." . ,emacs-backup-dir))
+      version-control t
       kept-new-versions 10
       kept-old-versions 2
       delete-old-versions t
-      backup-by-copying t)   ;; Don’t clobber symlinks
-
-;; Auto-save files (#...#)
-(setq auto-save-file-name-transforms
-      `((".*" "~/.cache/emacs/auto-saves/" t)))
-(setq auto-save-default t
-      auto-save-timeout 5   ;; seconds idle before auto-save
-      auto-save-interval 20 ;; keystrokes before auto-save
-)
-
-;; Create the directories if they don't exist
-(make-directory "~/.cache/emacs/backups/" t)
-(make-directory "~/.cache/emacs/auto-saves/" t)
+      backup-by-copying t)
