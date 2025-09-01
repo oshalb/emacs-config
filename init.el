@@ -93,7 +93,7 @@
    '("f" . find-file)
    '("s" . save-buffer)
    '("qq" . kill-emacs)
-   '("bs" . switch-to-buffer)
+   '("bs" . consult-buffer)
    '("bk" . kill-buffer)
    '("qf" . delete-frame))
 
@@ -170,7 +170,7 @@
 
 (use-package projectile
   :init
-  (setq projectile-project-search-path '("~/Projects/" "~/Projects/git_repos/"))
+  (setq projectile-project-search-path '(("~/Projects/" . 2) "~/Projects/git_repos/"))
   (projectile-mode +1)
   :bind (:map projectile-mode-map
 	      ("C-c p" . projectile-command-map))
@@ -459,7 +459,9 @@
         ("C-x t M-t" . treemacs-find-tag)))
 
 (use-package treemacs-projectile
-  :after (treemacs projectile))
+  :after (treemacs projectile)
+  :config
+  (treemacs-project-follow-mode +1))
 
 (use-package treemacs-magit
   :after (treemacs magit))
