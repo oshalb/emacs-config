@@ -5,3 +5,6 @@ straight/
 *#*
 .DS_Store
 transient/
+.cache/
+projectile-bookmarks.eld
+projects
