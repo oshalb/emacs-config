@@ -8,3 +8,4 @@ transient/
 .cache/
 projectile-bookmarks.eld
 projects
+tramp
