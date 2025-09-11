@@ -478,6 +478,12 @@
  :config
  (direnv-mode))
 
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles partial-completion))))
+  (completion-pcm-leading-wildcard t))
 
 (use-package go-mode
   :hook ((go-mode . eglot-ensure)
