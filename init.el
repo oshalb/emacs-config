@@ -1,12 +1,14 @@
-;;;; ==========================
-;;;; Init file for Oshal Borkar
-;;;; ==========================
+;;; init.el --- Emacs initialization file -*- lexical-binding: t; -*-
+
+;;; Commentary:
+;;; Init file for Oshal Borkar
+
 
 ;;; +++++++++++++++++++++++++++
 ;;; Basic visual/frame defaults
 ;;; +++++++++++++++++++++++++++
 
-
+;;; Code:
 (defun oshal/setup-ui (frame)
   "Apply UI settings to FRAME."
   (with-selected-frame frame
@@ -63,7 +65,7 @@
 
 (use-package rainbow-delimiters
   :config
-  (rainbow-delimiters-mode))
+  (rainbow-delimiters-mode +1))
 
 (use-package meow
   :init
@@ -466,9 +468,22 @@
 (use-package treemacs-magit
   :after (treemacs magit))
 
-(use-package company
-  :config
-  (global-company-mode))
+(use-package corfu
+  :init
+  (global-corfu-mode +1)
+  (corfu-popupinfo-mode +1)
+  :custom
+  (corfu-auto t)
+  (corfu-auto-delay 0)
+  (corfu-auto-prefix 1)
+  (corfu-cycle t)
+  (corfu-popupinfo-delay 0.2))
+
+(use-package cape
+  :hook
+  ('completion-at-point-functions . #'cape-dabbrev)
+  ('completion-at-point-functions . #'cape-file)
+  ('completion-at-point-functions . #'cape-elisp-block))
 
 (use-package flycheck
   :config
@@ -489,7 +504,7 @@
   :hook ((go-mode . eglot-ensure)
 	 (go-mode . (lambda()
 		      (setq tab-width 4
-			    indent-tab-mode 1)
+			    indent-tab-mode t)
 		      (add-hook 'before-save-hook #'gofmt-before-save nil t))))
   :config
   (setq gofmt-command "goimports"))
