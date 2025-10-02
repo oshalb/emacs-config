@@ -9,3 +9,6 @@ transient/
 projectile-bookmarks.eld
 projects
 tramp
+.persistent-scratch
+elpa/
+tree-sitter/

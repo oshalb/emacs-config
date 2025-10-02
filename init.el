@@ -59,6 +59,10 @@
 ;;; Package conifigurations (Use-Package via Straight.el)
 ;;; +++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+(use-package persistent-scratch
+  :config
+  (persistent-scratch-setup-default))
+
 (use-package zenburn-theme
   :config
   (load-theme 'zenburn t))
