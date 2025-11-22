@@ -176,7 +176,7 @@
 
 (use-package projectile
   :init
-  (setq projectile-project-search-path '(("~/Projects/" . 2) "~/Projects/git_repos/"))
+  (setq projectile-project-search-path '(("~/Projects/" . 2) "~/Projects/git_repos/" "~/Documents/Personal Documents/")
   (projectile-mode +1)
   :bind (:map projectile-mode-map
 	      ("C-c p" . projectile-command-map))
