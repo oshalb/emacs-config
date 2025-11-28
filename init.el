@@ -14,6 +14,7 @@
   (with-selected-frame frame
     (tool-bar-mode -1) ; Hides the tool bar
     (scroll-bar-mode -1) ; Hides scroll bar
+    (global-visual-line-mode +1) ; Word wrap
     (global-display-line-numbers-mode 1) ; Display line numbers
     (setq ring-bell-function 'ignore) ; Removes the annoying alert sound
     (set-frame-parameter frame 'fullscreen 'maximized)
@@ -68,8 +69,8 @@
   (load-theme 'zenburn t))
 
 (use-package rainbow-delimiters
-  :config
-  (rainbow-delimiters-mode +1))
+  :hook
+  (prog-mode . rainbow-delimiters-mode))
 
 (use-package meow
   :init
@@ -168,15 +169,25 @@
   (meow-define-keys 'insert
     '("C-[" . meow-insert-exit)))
 
-(use-package magit)
+(use-package magit
+  :config
+  (meow-leader-define-key
+   '("u" . magit)))
+
 (use-package vterm)
 (use-package markdown-mode)
 
+(use-package org
+  :config
+  (require 'ox-latex))
 
+(use-package flyspell
+  :hook
+  (org-mode . flyspell-mode))
 
 (use-package projectile
   :init
-  (setq projectile-project-search-path '(("~/Projects/" . 2) "~/Projects/git_repos/" "~/Documents/Personal Documents/")
+  (setq projectile-project-search-path '(("~/Projects/" . 2) "~/Projects/git_repos/" "~/Documents/Personal Documents/"))
   (projectile-mode +1)
   :bind (:map projectile-mode-map
 	      ("C-c p" . projectile-command-map))
@@ -206,23 +217,15 @@
   :init
   (vertico-mode))
 
-;; Enable rich annotations using the Marginalia package
 (use-package marginalia
   ;; Bind `marginalia-cycle' locally in the minibuffer.  To make the binding
   ;; available in the *Completions* buffer, add it to the
   ;; `completion-list-mode-map'.
   :bind (:map minibuffer-local-map
          ("M-A" . marginalia-cycle))
-
-  ;; The :init section is always executed.
   :init
-
-  ;; Marginalia must be activated in the :init section of use-package such that
-  ;; the mode gets enabled right away. Note that this forces loading the
-  ;; package.
   (marginalia-mode))
 
-;; Example configuration for Consult
 (use-package consult
   ;; Replace bindings. Lazily loaded by `use-package'.
   :bind (;; C-c bindings in `mode-specific-map'
@@ -277,27 +280,18 @@
          :map minibuffer-local-map
          ("M-s" . consult-history)                 ;; orig. next-matching-history-element
          ("M-r" . consult-history))                ;; orig. previous-matching-history-element
-
-  ;; Enable automatic preview at point in the *Completions* buffer. This is
-  ;; relevant when you use the default completion UI.
-  :hook (completion-list-mode . consult-preview-at-point-mode)
-
-  ;; The :init configuration is always executed (Not lazy)
+  :hook
+  (completion-list-mode . consult-preview-at-point-mode)
   :init
-
   ;; Tweak the register preview for `consult-register-load',
   ;; `consult-register-store' and the built-in commands.  This improves the
   ;; register formatting, adds thin separator lines, register sorting and hides
   ;; the window mode line.
   (advice-add #'register-preview :override #'consult-register-window)
   (setq register-preview-delay 0.5)
-
   ;; Use Consult to select xref locations with preview
   (setq xref-show-xrefs-function #'consult-xref
         xref-show-definitions-function #'consult-xref)
-
-  ;; Configure other variables and modes in the :config section,
-  ;; after lazily loading the package.
   :config
 
   ;; Optionally configure preview. The default value
@@ -326,17 +320,12 @@
 )
 
 (use-package embark
-
   :bind
   (("C-." . embark-act)         ;; pick some comfortable binding
    ("C-;" . embark-dwim)        ;; good alternative: M-.
    ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
-
   :init
-
-  ;; Optionally replace the key help with a completing-read interface
   (setq prefix-help-command #'embark-prefix-help-command)
-
   ;; Show the Embark target at point via Eldoc. You may adjust the
   ;; Eldoc strategy, if you want to see the documentation from
   ;; multiple providers. Beware that using this can be a little
@@ -349,16 +338,13 @@
   ;; Add Embark to the mouse context menu. Also enable `context-menu-mode'.
   ;; (context-menu-mode 1)
   ;; (add-hook 'context-menu-functions #'embark-context-menu 100)
-
   :config
-
   ;; Hide the mode line of the Embark live/completions buffers
   (add-to-list 'display-buffer-alist
                '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
                  nil
                  (window-parameters (mode-line-format . none)))))
 
-;; Consult users will also want the embark-consult package.
 (use-package embark-consult
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
@@ -470,7 +456,8 @@
   (treemacs-project-follow-mode +1))
 
 (use-package treemacs-magit
-  :after (treemacs magit))
+  :after
+  (treemacs magit))
 
 (use-package corfu
   :init
