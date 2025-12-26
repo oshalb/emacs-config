@@ -179,7 +179,20 @@
 
 (use-package org
   :config
-  (require 'ox-latex))
+  (meow-leader-define-key
+   '("ol" . org-store-link)
+   '("oa" . org-agenda)
+   '("oc" . org-capture)
+   '("on" . org-next-visible-heading)
+   '("op" . org-previous-visible-heading)
+   '("of" . org-forward-heading-same-level)
+   '("ob" . org-backward-heading-same-level)
+   '("ou" . org-up-heading)
+   '("oj" . org-goto))
+  (require 'ox-latex)
+  (org-indent-mode +1)
+  :hook
+  (org-mode . org-indent-mode))
 
 (use-package flyspell
   :hook
@@ -187,7 +200,7 @@
 
 (use-package projectile
   :init
-  (setq projectile-project-search-path '(("~/Projects/" . 2) "~/Projects/git_repos/" "~/Documents/Personal Documents/"))
+  (setq projectile-project-search-path '(("~/Projects/" . 2) "~/Projects/git_repos/" "~/Documents/Personal Documents/" ("~/Projects/" . 3)))
   (projectile-mode +1)
   :bind (:map projectile-mode-map
 	      ("C-c p" . projectile-command-map))
