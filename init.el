@@ -1,4 +1,4 @@
-;;; init.el --- Emacs initialization file -*- lexical-binding: t; -*-
+;; init.el --- Emacs initialization file -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 ;;; Init file for Oshal Borkar
@@ -62,6 +62,8 @@
 
 (use-package persistent-scratch
   :config
+  (setq persistent-scratch-save-file
+	(concat emacs-cache-dir "/persistent-scratch"))
   (persistent-scratch-setup-default))
 
 (use-package zenburn-theme
@@ -102,9 +104,39 @@
    '("qq" . kill-emacs)
    '("bs" . consult-buffer)
    '("bk" . kill-buffer)
-   '("qf" . delete-frame))
+   '("qf" . delete-frame)
+   '("ol" . org-store-link)
+   '("oa" . org-agenda)
+   '("oc" . org-capture)
+   '("on" . org-next-visible-heading)
+   '("op" . org-previous-visible-heading)
+   '("of" . org-forward-heading-same-level)
+   '("ob" . org-backward-heading-same-level)
+   '("ou" . org-up-heading)
+   '("oj" . org-goto)
+   '("w" . which-key-mode)
+   '("p" . projectile-command-map)
+   '("u" . magit))
 
   (meow-normal-define-key
+   ;; Char and Word movement
+   '("h" . meow-left)
+   '("j" . meow-next)
+   '("k" . meow-prev)
+   '("l" . meow-right)
+   '("{" . meow-page-up)
+   '("}" . meow-page-down)
+   '("H" . meow-left-expand)
+   '("J" . meow-next-expand)
+   '("K" . meow-prev-expand)
+   '("L" . meow-right-expand)
+   '("w" . meow-mark-word)
+   '("W" . meow-mark-symbol)
+   '("e" . meow-next-word)
+   '("E" . meow-next-symbol)
+   '("b" . meow-back-word)
+   '("B" . meow-back-symbol)
+   ;; Common Movements
    '("0" . meow-expand-0)
    '("9" . meow-expand-9)
    '("8" . meow-expand-8)
@@ -115,82 +147,60 @@
    '("3" . meow-expand-3)
    '("2" . meow-expand-2)
    '("1" . meow-expand-1)
-   '("-" . negative-argument)
-   '(";" . meow-reverse)
+   '("v" . meow-visit)
+   '("n" . meow-search)
+   '("x" . meow-line)
+   '("o" . meow-block)
+   '("O" . meow-to-block)
+   '("f" . meow-find)
+   '("t" . meow-till)
+   '("m" . meow-join)
+   ;; Thing-based Selection
    '("," . meow-inner-of-thing)
    '("." . meow-bounds-of-thing)
    '("[" . meow-beginning-of-thing)
    '("]" . meow-end-of-thing)
+   ;; Toggle State
+   '("i" . meow-insert)
    '("a" . meow-append)
-   '("A" . meow-open-below)
-   '("b" . meow-back-word)
-   '("B" . meow-back-symbol)
    '("c" . meow-change)
+   '("I" . meow-open-above)
+   '("A" . meow-open-below)
+   ;; Modification
+   '("s" . meow-kill)
    '("d" . meow-delete)
    '("D" . meow-backward-delete)
-   '("e" . meow-next-word)
-   '("E" . meow-next-symbol)
-   '("f" . meow-find)
-   '("g" . meow-cancel-selection)
-   '("G" . meow-grab)
-   '("h" . meow-left)
-   '("H" . meow-left-expand)
-   '("i" . meow-insert)
-   '("I" . meow-open-above)
-   '("j" . meow-next)
-   '("J" . meow-next-expand)
-   '("k" . meow-prev)
-   '("K" . meow-prev-expand)
-   '("l" . meow-right)
-   '("L" . meow-right-expand)
-   '("m" . meow-join)
-   '("n" . meow-search)
-   '("o" . meow-block)
-   '("O" . meow-to-block)
-   '("q" . meow-quit)
-   '("Q" . meow-goto-line)
+   '("y" . meow-save)
+   '("p" . meow-yank)
+   '("P" . meow-yank-pop)
    '("r" . meow-replace)
-   '("R" . meow-swap-grab)
-   '("s" . meow-kill)
-   '("t" . meow-till)
+   ;; Other Commands
+   '("g" . meow-cancel-selection)
+   '(";" . meow-reverse)
    '("u" . meow-undo)
    '("U" . meow-undo-in-selection)
-   '("v" . meow-visit)
-   '("w" . meow-mark-word)
-   '("W" . meow-mark-symbol)
-   '("x" . meow-line)
-   '("X" . meow-goto-line)
-   '("y" . meow-save)
-   '("Y" . meow-sync-grab)
    '("z" . meow-pop-selection)
+   '("G" . meow-grab)
+   '("Y" . meow-sync-grab)
+   '("R" . meow-swap-grab)
+   
+   '("-" . negative-argument)
+   '("q" . meow-quit)
+   '("X" . meow-goto-line)
    '("'" . repeat)
    '("<escape>" . ignore))
 
   (meow-define-keys 'insert
     '("C-[" . meow-insert-exit)))
 
-(use-package magit
-  :config
-  (meow-leader-define-key
-   '("u" . magit)))
+(use-package magit)
 
 (use-package vterm)
 (use-package markdown-mode)
 
 (use-package org
   :config
-  (meow-leader-define-key
-   '("ol" . org-store-link)
-   '("oa" . org-agenda)
-   '("oc" . org-capture)
-   '("on" . org-next-visible-heading)
-   '("op" . org-previous-visible-heading)
-   '("of" . org-forward-heading-same-level)
-   '("ob" . org-backward-heading-same-level)
-   '("ou" . org-up-heading)
-   '("oj" . org-goto))
   (require 'ox-latex)
-  (org-indent-mode +1)
   :hook
   (org-mode . org-indent-mode))
 
@@ -200,19 +210,17 @@
 
 (use-package projectile
   :init
-  (setq projectile-project-search-path '(("~/Projects/" . 2) "~/Projects/git_repos/" "~/Documents/Personal Documents/" ("~/Projects/" . 3)))
+  (setq projectile-project-search-path
+	'(("~/Projects/" . 2)
+	  "~/Projects/git_repos/"
+	  "~/Documents/Personal Documents/"
+	  ("~/Projects/" . 3)))
   (projectile-mode +1)
-  :bind (:map projectile-mode-map
-	      ("C-c p" . projectile-command-map))
-  :after meow
-  :config
-  (meow-leader-define-key
-   '("p" . projectile-command-map)))
+  :bind
+  (:map projectile-mode-map
+	("C-c p" . projectile-command-map)))
 
-(use-package which-key
-  :config
-  (meow-leader-define-key
-   '("w" . which-key-mode)))
+(use-package which-key)
 
 (use-package nerd-icons)
 
@@ -513,5 +521,13 @@
   :config
   (setq gofmt-command "goimports"))
 
+
+(use-package paredit
+  :init
+  (paredit-mode +1))
+
+(use-package geiser-guile
+  :hook
+  (scheme-mode . geiser-mode))
 
 ;;; init.el ends here
