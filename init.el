@@ -99,6 +99,7 @@
    '("0" . meow-digit-argument)
    '("/" . meow-keypad-describe-key)
    '("?" . meow-cheatsheet)
+   '(";" . meow-comment)
    '("f" . find-file)
    '("s" . save-buffer)
    '("qq" . kill-emacs)
@@ -183,7 +184,7 @@
    '("G" . meow-grab)
    '("Y" . meow-sync-grab)
    '("R" . meow-swap-grab)
-   
+
    '("-" . negative-argument)
    '("q" . meow-quit)
    '("X" . meow-goto-line)
@@ -191,7 +192,7 @@
    '("<escape>" . ignore))
 
   (meow-define-keys 'insert
-    '("C-[" . meow-insert-exit)))
+    '("C-[" . meow-escape-or-normal-modal)))
 
 (use-package magit)
 
