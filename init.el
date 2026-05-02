@@ -8,7 +8,7 @@
 ;;; Basic visual/frame defaults
 ;;; +++++++++++++++++++++++++++
 
-;;; Code:
+
 (defun oshal/setup-ui (frame)
   "Apply UI settings to FRAME."
   (with-selected-frame frame
@@ -138,6 +138,31 @@
    '("b" . meow-back-word)
    '("B" . meow-back-symbol)
    ;; Common Movements
+   '("v" . meow-visit)
+   '("n" . meow-search)
+   '("x" . meow-line)
+   '("o" . meow-block)
+   '("O" . meow-to-block)
+   '("f" . meow-find)
+   '("t" . meow-till)
+   '("m" . meow-join)
+   ;; Thing-based Selection
+   '("," . meow-inner-of-thing)
+   '("." . meow-bounds-of-thing)
+   '("[" . meow-beginning-of-thing)
+   '("]" . meow-end-of-thing)
+   ;; Toggle State
+   '("i" . meow-insert)
+   '("a" . meow-append)
+   '("c" . meow-change)
+   '("I" . meow-open-above)
+   '("A" . meow-open-below)
+   ;; Modification
+   '("s" . meow-kill)
+   '("d" . meow-delete)
+   '("D" . meow-backward-delete)
+   '("y" . meow-save)
+   '("p" . meow-yank)
    '("0" . meow-expand-0)
    '("9" . meow-expand-9)
    '("8" . meow-expand-8)
@@ -178,6 +203,11 @@
    ;; Other Commands
    '("g" . meow-cancel-selection)
    '(";" . meow-reverse)
+   '("P" . meow-yank-pop)
+   '("r" . meow-replace)
+   ;; Other Commands
+   '("g" . meow-cancel-selection)
+   '(";" . meow-reverse)
    '("u" . meow-undo)
    '("U" . meow-undo-in-selection)
    '("z" . meow-pop-selection)
@@ -197,6 +227,7 @@
 (use-package magit)
 
 (use-package vterm)
+
 (use-package markdown-mode)
 
 (use-package org
